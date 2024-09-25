@@ -3,6 +3,7 @@ package guru.qa.niffler.test.web;
 import com.codeborne.selenide.Selenide;
 import com.github.javafaker.Faker;
 import guru.qa.niffler.config.Config;
+import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.RegisterPage;
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Random;
 
-@ExtendWith(BrowserExtension.class)
+@WebTest
 public class LoginWebTest {
 
     private static final Config CFG = Config.getInstance();
