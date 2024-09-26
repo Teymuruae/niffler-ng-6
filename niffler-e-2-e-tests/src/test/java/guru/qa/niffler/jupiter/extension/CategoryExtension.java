@@ -61,8 +61,7 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
     public void afterTestExecution(ExtensionContext context) throws Exception {
         CategoryJson categoryJson = context.getStore(NAMESPACE).get(context.getUniqueId(), CategoryJson.class);
 
-        if (categoryJson != null) {
-            if (!categoryJson.archived()) {
+        if (categoryJson != null && !categoryJson.archived()) {
                 CategoryJson archived = new CategoryJson(
                         categoryJson.id(),
                         categoryJson.name(),
@@ -74,7 +73,6 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
                         context.getUniqueId(),
                         archived
                 );
-            }
         }
     }
 }
