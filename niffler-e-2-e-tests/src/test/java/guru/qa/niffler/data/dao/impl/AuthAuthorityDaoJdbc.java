@@ -1,6 +1,10 @@
 package guru.qa.niffler.data.dao.impl;
 
+import guru.qa.niffler.config.Config;
+import guru.qa.niffler.data.dao.AuthAuthorityDao;
 import guru.qa.niffler.data.dao.UserdataUserDao;
+import guru.qa.niffler.data.entity.auth.Authority;
+import guru.qa.niffler.data.entity.auth.AuthorityEntity;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
 import guru.qa.niffler.model.CurrencyValues;
 
@@ -8,28 +12,23 @@ import java.sql.*;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UserdataUserDaoJdbc implements UserdataUserDao {
+public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
 
     private final Connection connection;
 
-    public UserdataUserDaoJdbc(Connection connection) {
+    public AuthAuthorityDaoJdbc(Connection connection) {
         this.connection = connection;
     }
 
     @Override
-    public UserEntity createUser(UserEntity user) {
+    public AuthorityEntity create(AuthorityEntity entity) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO public.user (username, currency, firstname, surname, full_name, photo, photo_small) " +
-                        "VALUES ( ?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO public.authority (user_id, authority) " +
+                        "VALUES ( ?, ?)",
                 Statement.RETURN_GENERATED_KEYS
         )) {
-            ps.setString(1, user.getUsername());
-            ps.setString(2, user.getCurrency().name());
-            ps.setString(3, user.getFirstname());
-            ps.setString(4, user.getSurname());
-            ps.setString(5, user.getFullname());
-            ps.setBytes(6, user.getPhoto());
-            ps.setBytes(7, user.getPhotoSmall());
+            ps.setObject(1, entity.getUserId());
+            ps.setString(2, entity.getAuthority().getValue());
 
             ps.executeUpdate();
 
@@ -41,32 +40,28 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
                     throw new SQLException("Can`t find id in ResultSet");
                 }
             }
-            user.setId(generatedKey);
-            return user;
+            entity.setId(generatedKey);
+            return entity;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Optional<UserEntity> findById(UUID id) {
+    public Optional<AuthorityEntity> findById(UUID id) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT * FROM public.user where id = ?"
+                "SELECT * FROM public.authority where id = ?"
         )) {
             ps.setObject(1, id);
             ps.execute();
 
-            UserEntity entity = new UserEntity();
+            AuthorityEntity entity = new AuthorityEntity();
             try (ResultSet rs = ps.getResultSet()) {
                 if (rs.next()) {
                     entity.setId(rs.getObject("id", UUID.class));
-                    entity.setUsername(rs.getString("username"));
-                    entity.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
-                    entity.setFirstname(rs.getString("firstname"));
-                    entity.setSurname(rs.getString("surname"));
-                    entity.setFullname(rs.getString("full_name"));
-                    entity.setPhoto(rs.getBytes("photo"));
-                    entity.setPhotoSmall(rs.getBytes("photo_small"));
+                    entity.setUserId(rs.getObject("user_id", UUID.class));
+                    entity.setAuthority(Authority.valueOf(rs.getString("authority")));
+
                     return Optional.of(
                             entity
                     );
@@ -80,24 +75,20 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
     }
 
     @Override
-    public Optional<UserEntity> findByUsername(String username) {
+    public Optional<AuthorityEntity> findByUserId(UUID userId) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "SELECT * FROM public.user WHERE username = ?"
+                "SELECT * FROM public.authority where user_id = ?"
         )) {
-            ps.setString(1, username);
+            ps.setObject(1, userId);
             ps.execute();
 
-            UserEntity entity = new UserEntity();
+            AuthorityEntity entity = new AuthorityEntity();
             try (ResultSet rs = ps.getResultSet()) {
                 if (rs.next()) {
                     entity.setId(rs.getObject("id", UUID.class));
-                    entity.setUsername(rs.getString("username"));
-                    entity.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
-                    entity.setFirstname(rs.getString("firstname"));
-                    entity.setSurname(rs.getString("surname"));
-                    entity.setFullname(rs.getString("full_name"));
-                    entity.setPhoto(rs.getBytes("photo"));
-                    entity.setPhotoSmall(rs.getBytes("photo_small"));
+                    entity.setUserId(rs.getObject("user_id", UUID.class));
+                    entity.setAuthority(Authority.valueOf(rs.getString("authority")));
+
                     return Optional.of(
                             entity
                     );
@@ -111,11 +102,11 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
     }
 
     @Override
-    public void delete(UserEntity user) {
+    public void delete(AuthorityEntity entity) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "DELETE FROM public.user where id = ?"
+                "DELETE FROM public.authority where user_id = ?"
         )) {
-            ps.setObject(1, user.getId());
+            ps.setObject(1, entity.getUserId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

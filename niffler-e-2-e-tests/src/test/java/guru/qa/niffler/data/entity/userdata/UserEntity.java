@@ -1,32 +1,44 @@
 package guru.qa.niffler.data.entity.userdata;
 
 import guru.qa.niffler.model.CurrencyValues;
-import jakarta.persistence.*;
+import guru.qa.niffler.model.UserJson;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Stream;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class UserEntity implements Serializable {
 
-  private UUID id;
+    private UUID id;
 
-  private String username;
+    private String username;
 
-  private CurrencyValues currency;
+    private CurrencyValues currency;
 
-  private String firstname;
+    private String firstname;
 
-  private String surname;
+    private String surname;
 
-  private String fullname;
+    private String fullname;
 
-  private byte[] photo;
+    private byte[] photo;
 
-  private byte[] photoSmall;
+    private byte[] photoSmall;
+
+    public static UserEntity fromJson(UserJson user) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(user.id());
+        userEntity.setUsername(user.username());
+        userEntity.setCurrency(user.currency());
+        userEntity.setFirstname(user.firstname());
+        userEntity.setSurname(user.surname());
+        userEntity.setFullname(user.fullname());
+        userEntity.setPhoto(user.photo() != null ? user.photo().getBytes(StandardCharsets.UTF_8) : null);
+        userEntity.setPhotoSmall(user.photoSmall() != null ? user.photoSmall().getBytes(StandardCharsets.UTF_8) : null);
+        return userEntity;
+    }
 }
