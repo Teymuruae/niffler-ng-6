@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -61,6 +62,16 @@ public class UdUserDaoSpringJdbc implements UserdataUserDao {
     @Override
     public Optional<UserEntity> findByUsername(String username) {
         return Optional.empty();
+    }
+
+    @Override
+    public List<UserEntity> findAll() {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        return
+                jdbcTemplate.query(
+                        "SELECT * FROM \"user\"",
+                        UdUserEntityRowMapper.instance
+                );
     }
 
     @Override

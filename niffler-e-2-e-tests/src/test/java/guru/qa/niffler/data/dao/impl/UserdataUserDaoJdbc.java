@@ -1,10 +1,13 @@
 package guru.qa.niffler.data.dao.impl;
 
 import guru.qa.niffler.data.dao.UserdataUserDao;
+import guru.qa.niffler.data.entity.spend.SpendEntity;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
 import guru.qa.niffler.model.CurrencyValues;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -104,6 +107,36 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
                 } else {
                     return Optional.empty();
                 }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<UserEntity> findAll() {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM public.user"
+        )) {
+            ps.execute();
+
+            List<UserEntity> entities = new ArrayList<>();
+            try (ResultSet rs = ps.getResultSet()) {
+
+                while (rs.next()) {
+                    UserEntity entity = new UserEntity();
+                    entity.setId(rs.getObject("id", UUID.class));
+                    entity.setUsername(rs.getString("username"));
+                    entity.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
+                    entity.setFirstname(rs.getString("firstname"));
+                    entity.setSurname(rs.getString("surname"));
+                    entity.setFullname(rs.getString("full_name"));
+                    entity.setPhoto(rs.getBytes("photo"));
+                    entity.setPhotoSmall(rs.getBytes("photo_small"));
+
+                    entities.add(entity);
+                }
+                return entities;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
