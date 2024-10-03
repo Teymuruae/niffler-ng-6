@@ -93,7 +93,11 @@ public class CategoryDaoSpringJdbc implements CategoryDao {
 
     @Override
     public void deleteCategory(CategoryEntity category) {
-
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate.update(
+                "DELETE FROM \"category\" WHERE id = ?",
+                category.getId()
+        );
     }
 
 }

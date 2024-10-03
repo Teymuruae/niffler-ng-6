@@ -16,5 +16,5 @@ public interface AuthAuthorityDao {
 
     List<AuthorityEntity> findAll();
 
-    void delete(AuthorityEntity user);
+    void delete(AuthorityEntity entity);
 }
