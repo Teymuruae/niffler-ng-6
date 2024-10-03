@@ -23,13 +23,13 @@ public class JdbcTest {
         );
 
         UsersDbClient usersDbClient = new UsersDbClient();
-        usersDbClient.createUser(userJson);
+        usersDbClient.createUserSpringJdbc(userJson);
     }
 
     @Test
     void deleteUserTest(){
         UserJson userJson = new UserJson(
-                UUID.fromString("e099cf92-7f58-11ef-bc4e-0242ac110002"),
+                UUID.fromString("96ab5df8-80ff-11ef-b0a4-0242ac110002"),
                 "eagle",
                 "Ivan",
                 "Ivanov",

@@ -1,14 +1,13 @@
 package guru.qa.niffler.data.dao.impl;
 
-import guru.qa.niffler.config.Config;
 import guru.qa.niffler.data.dao.AuthAuthorityDao;
-import guru.qa.niffler.data.dao.UserdataUserDao;
 import guru.qa.niffler.data.entity.auth.Authority;
 import guru.qa.niffler.data.entity.auth.AuthorityEntity;
-import guru.qa.niffler.data.entity.userdata.UserEntity;
-import guru.qa.niffler.model.CurrencyValues;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,27 +20,17 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
     }
 
     @Override
-    public AuthorityEntity create(AuthorityEntity entity) {
+    public void create(AuthorityEntity... authority) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO public.authority (user_id, authority) " +
-                        "VALUES ( ?, ?)",
-                Statement.RETURN_GENERATED_KEYS
-        )) {
-            ps.setObject(1, entity.getUserId());
-            ps.setString(2, entity.getAuthority().getValue());
-
-            ps.executeUpdate();
-
-            final UUID generatedKey;
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    generatedKey = rs.getObject("id", UUID.class);
-                } else {
-                    throw new SQLException("Can`t find id in ResultSet");
-                }
+                "INSERT INTO \"authority\" (user_id, authority) VALUES (?, ?)",
+                PreparedStatement.RETURN_GENERATED_KEYS)) {
+            for (AuthorityEntity a : authority) {
+                ps.setObject(1, a.getUserId());
+                ps.setString(2, a.getAuthority().name());
+                ps.addBatch();
+                ps.clearParameters();
             }
-            entity.setId(generatedKey);
-            return entity;
+            ps.executeBatch();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

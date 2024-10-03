@@ -17,7 +17,7 @@ public class UserdataUserDaoJdbc implements UserdataUserDao {
     }
 
     @Override
-    public UserEntity createUser(UserEntity user) {
+    public UserEntity create(UserEntity user) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO public.user (username, currency, firstname, surname, full_name, photo, photo_small) " +
                         "VALUES ( ?, ?, ?, ?, ?, ?, ?)",

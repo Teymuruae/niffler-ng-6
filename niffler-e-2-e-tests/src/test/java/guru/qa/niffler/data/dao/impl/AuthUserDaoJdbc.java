@@ -2,11 +2,11 @@ package guru.qa.niffler.data.dao.impl;
 
 import guru.qa.niffler.data.dao.AuthUserDao;
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
-import guru.qa.niffler.data.entity.auth.AuthorityEntity;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,12 +19,10 @@ public class AuthUserDaoJdbc implements AuthUserDao {
     }
 
     @Override
-    public AuthUserEntity createUser(AuthUserEntity user) {
+    public AuthUserEntity create(AuthUserEntity user) {
         try (PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO public.user (username, password, enabled, account_non_expired,  account_non_locked, credentials_non_expired) " +
-                        "VALUES ( ?, ?, ?, ?, ?, ?)",
-                Statement.RETURN_GENERATED_KEYS
-        )) {
+                "INSERT INTO \"user\" (username, password, enabled, account_non_expired, account_non_locked, credentials_non_expired) " +
+                        "VALUES (?, ?, ?, ?, ?, ?)", PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());
             ps.setBoolean(3, user.getEnabled());
@@ -43,14 +41,6 @@ public class AuthUserDaoJdbc implements AuthUserDao {
                 }
             }
             user.setId(generatedKey);
-
-            if(!user.getAuthorities().isEmpty()){
-                for (AuthorityEntity authority : user.getAuthorities()) {
-                    authority.setUserId(user.getId());
-                    authority.setId(new AuthAuthorityDaoJdbc(connection).create(authority).getId());
-                }
-            }
-
             return user;
         } catch (SQLException e) {
             throw new RuntimeException(e);
