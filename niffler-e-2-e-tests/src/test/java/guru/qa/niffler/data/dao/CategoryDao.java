@@ -1,5 +1,6 @@
 package guru.qa.niffler.data.dao;
 
+import guru.qa.niffler.data.entity.auth.AuthUserEntity;
 import guru.qa.niffler.data.entity.spend.CategoryEntity;
 import guru.qa.niffler.data.entity.spend.SpendEntity;
 
@@ -13,5 +14,6 @@ public interface CategoryDao {
   Optional<CategoryEntity> findCategoryById(UUID id);
   Optional<CategoryEntity> findCategoryByUsernameAndCategoryName(String username, String categoryName);
   List<CategoryEntity> findAllByUsername(String username);
+  List<CategoryEntity> findAll();
   void deleteCategory(CategoryEntity category);
 }
