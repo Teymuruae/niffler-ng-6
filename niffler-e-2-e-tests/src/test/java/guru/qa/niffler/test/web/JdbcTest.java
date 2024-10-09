@@ -13,7 +13,7 @@ public class JdbcTest {
     void createUserTest(){
         UserJson userJson = new UserJson(
                 null,
-                "eagle",
+                "anabolik",
                 "Ivan",
                 "Ivanov",
                 "Ivanov Ivan",
@@ -23,7 +23,7 @@ public class JdbcTest {
         );
 
         UsersDbClient usersDbClient = new UsersDbClient();
-        usersDbClient.createUserSpringJdbc(userJson);
+        usersDbClient.createUser(userJson);
     }
 
     @Test

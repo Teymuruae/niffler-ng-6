@@ -25,12 +25,12 @@ public class SpendDbClient {
         return transaction(connection -> {
                     SpendEntity spendEntity = SpendEntity.fromJson(spend);
                     if (spendEntity.getCategory().getId() == null) {
-                        CategoryEntity categoryEntity = new CategoryDaoJdbc(connection)
+                        CategoryEntity categoryEntity = new CategoryDaoJdbc()
                                 .create(spendEntity.getCategory());
                         spendEntity.setCategory(categoryEntity);
                     }
                     return SpendJson.fromEntity(
-                            new SpendDaoJdbc(connection).create(spendEntity)
+                            new SpendDaoJdbc().create(spendEntity)
                     );
                 },
                 CFG.spendJdbcUrl()
@@ -39,7 +39,7 @@ public class SpendDbClient {
 
     public Optional<SpendEntity> findSpendById(UUID id) {
         return transaction(connection -> {
-                    return new SpendDaoJdbc(connection).findSpendById(id);
+                    return new SpendDaoJdbc().findSpendById(id);
                 },
                 CFG.spendJdbcUrl()
         );
@@ -47,7 +47,7 @@ public class SpendDbClient {
 
     public List<SpendEntity> findAllSpendsByUsername(String username) {
         return transaction(connection -> {
-                    return new SpendDaoJdbc(connection).findAllByUsername(username);
+                    return new SpendDaoJdbc().findAllByUsername(username);
                 },
                 CFG.spendJdbcUrl()
         );
@@ -55,7 +55,7 @@ public class SpendDbClient {
 
     public void deleteSpend(SpendEntity spend) {
         transaction(connection -> {
-                    new SpendDaoJdbc(connection).deleteSpend(spend);
+                    new SpendDaoJdbc().deleteSpend(spend);
                 },
                 CFG.spendJdbcUrl()
         );
@@ -65,7 +65,7 @@ public class SpendDbClient {
         return transaction(connection -> {
                     CategoryEntity categoryEntity = CategoryEntity.fromJson(category);
                     return CategoryJson.fromEntity(
-                            new CategoryDaoJdbc(connection).create(categoryEntity));
+                            new CategoryDaoJdbc().create(categoryEntity));
                 },
                 CFG.spendJdbcUrl(),
                 ISOLATION_LVL
@@ -74,7 +74,7 @@ public class SpendDbClient {
 
     public Optional<CategoryEntity> findCategoryById(UUID id) {
         return transaction(connection -> {
-                    return new CategoryDaoJdbc(connection).findCategoryById(id);
+                    return new CategoryDaoJdbc().findCategoryById(id);
                 },
                 CFG.spendJdbcUrl(),
                 ISOLATION_LVL
@@ -83,7 +83,7 @@ public class SpendDbClient {
 
     public Optional<CategoryEntity> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
         return transaction(connection -> {
-                    return new CategoryDaoJdbc(connection).findCategoryByUsernameAndCategoryName(username, categoryName);
+                    return new CategoryDaoJdbc().findCategoryByUsernameAndCategoryName(username, categoryName);
                 },
                 CFG.spendJdbcUrl(),
                 ISOLATION_LVL
@@ -92,7 +92,7 @@ public class SpendDbClient {
 
     public List<CategoryEntity> findAllCategoriesByUsername(String username) {
         return transaction(connection -> {
-                    return new CategoryDaoJdbc(connection).findAllByUsername(username);
+                    return new CategoryDaoJdbc().findAllByUsername(username);
                 },
                 CFG.spendJdbcUrl(),
                 ISOLATION_LVL
@@ -102,7 +102,7 @@ public class SpendDbClient {
     public void deleteCategory(CategoryJson category) {
         transaction(connection -> {
                     CategoryEntity categoryEntity = CategoryEntity.fromJson(category);
-                    new CategoryDaoJdbc(connection).deleteCategory(categoryEntity);
+                    new CategoryDaoJdbc().deleteCategory(categoryEntity);
                 },
                 CFG.spendJdbcUrl(),
                 ISOLATION_LVL
