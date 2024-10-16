@@ -1,5 +1,6 @@
 package guru.qa.niffler.test.web;
 
+import guru.qa.niffler.data.dao.impl.UserdataUserDaoJdbc;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.service.UsersDbClient;
@@ -29,6 +30,51 @@ public class JdbcTest {
         usersDbClient.createUserJdbcTransaction(userJson);
 
         System.out.println(userJson);
+    }
+
+    @Test
+    void createUserRepositoryTest(){
+        UserJson userJson = new UserJson(
+                null,
+                randomUsername(),
+                "Ivan",
+                "Ivanov",
+                "Ivanov Ivan",
+                CurrencyValues.EUR,
+                null,
+                null
+        );
+
+        UsersDbClient usersDbClient = new UsersDbClient();
+        usersDbClient.createUserFromRepository(userJson);
+
+        System.out.println(userJson);
+    }
+
+    @Test
+    void addFriendTest(){
+        UserJson requester = UserJson.fromEntity(
+                new UserdataUserDaoJdbc().findByUsername("duck").get()
+        );
+        UserJson addressee = UserJson.fromEntity(
+                new UserdataUserDaoJdbc().findByUsername("frog").get()
+        );
+        UsersDbClient usersDbClient = new UsersDbClient();
+        usersDbClient.addFriend(requester, addressee);
+
+    }
+
+    @Test
+    void createInvitationTest(){
+        UserJson requester = UserJson.fromEntity(
+                new UserdataUserDaoJdbc().findByUsername("duck").get()
+        );
+        UserJson addressee = UserJson.fromEntity(
+                new UserdataUserDaoJdbc().findByUsername("Pok64").get()
+        );
+        UsersDbClient usersDbClient = new UsersDbClient();
+        usersDbClient.createInvitation(requester, addressee);
+
     }
 
     @Test
