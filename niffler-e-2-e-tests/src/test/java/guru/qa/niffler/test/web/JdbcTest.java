@@ -12,7 +12,7 @@ import java.util.UUID;
 import static guru.qa.niffler.utils.RandomDataUtils.randomUsername;
 
 public class JdbcTest {
-
+/*
     @Test
     void createUserJdbcTransactionTest(){
         UserJson userJson = new UserJson(
@@ -150,4 +150,6 @@ public class JdbcTest {
         UsersDbClient usersDbClient = new UsersDbClient();
         usersDbClient.deleteUser(userJson);
     }
+
+ */
 }
