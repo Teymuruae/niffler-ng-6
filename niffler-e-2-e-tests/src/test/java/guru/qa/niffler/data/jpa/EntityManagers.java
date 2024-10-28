@@ -1,6 +1,7 @@
 package guru.qa.niffler.data.jpa;
 
 import guru.qa.niffler.data.tpl.DataSources;
+import guru.qa.niffler.data.tpl.JdbcConnectionHolder;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -25,4 +26,8 @@ public class EntityManagers {
         ).createEntityManager()
     );
   }
+
+    public static void closeAllEmfs() {
+        emfs.values().forEach(EntityManagerFactory::close);
+    }
 }
