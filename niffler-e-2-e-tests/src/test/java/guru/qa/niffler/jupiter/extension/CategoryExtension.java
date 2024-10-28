@@ -27,7 +27,7 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
                     if (ArrayUtils.isNotEmpty(anno.categories())) {
                         List<CategoryJson> result = new ArrayList<>();
 
-                        UserJson user = context.getStore(NAMESPACE).get(
+                        UserJson user = context.getStore(UserExtension.NAMESPACE).get(
                                 context.getUniqueId(),
                                 UserJson.class
                         );
@@ -76,7 +76,7 @@ public class CategoryExtension implements BeforeEachCallback, ParameterResolver,
 
     @Override
     public void afterTestExecution(ExtensionContext context) throws Exception {
-        UserJson user = context.getStore(NAMESPACE).get(
+        UserJson user = context.getStore(UserExtension.NAMESPACE).get(
                 context.getUniqueId(), UserJson.class);
 
         List<CategoryJson> categories = user != null

@@ -29,7 +29,7 @@ public class SpendingExtension implements BeforeEachCallback, ParameterResolver 
                     if (ArrayUtils.isNotEmpty(anno.spendings())) {
                         List<SpendJson> result = new ArrayList<>();
 
-                        UserJson user = context.getStore(NAMESPACE).get(
+                        UserJson user = context.getStore(UserExtension.NAMESPACE).get(
                                 context.getUniqueId(),
                                 UserJson.class
                         );
@@ -47,7 +47,7 @@ public class SpendingExtension implements BeforeEachCallback, ParameterResolver 
                                     CurrencyValues.RUB,
                                     spendAnno.amount(),
                                     spendAnno.description(),
-                                    anno.username()
+                                    user != null ? user.username() : anno.username()
                             );
 
                             SpendJson createdSpend = spendClient.createSpend(spend);
