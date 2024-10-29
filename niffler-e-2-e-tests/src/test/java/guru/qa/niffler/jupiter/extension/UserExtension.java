@@ -11,6 +11,7 @@ import org.junit.platform.commons.support.AnnotationSupport;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class UserExtension implements BeforeEachCallback, ParameterResolver {
 
@@ -25,12 +26,19 @@ public class UserExtension implements BeforeEachCallback, ParameterResolver {
                     if ("".equals(anno.username())) {
                        final String username = RandomDataUtils.randomUsername();
                         UserJson testUser = userClient.createUser(username, defaultPassword);
+                        List<String> incomeInvitations = userClient.createIncomeInvitations(testUser, anno.incomeInvitations());
+                        List<String> outcomeInvitations = userClient.createOutcomeInvitations(testUser, anno.outcomeInvitations());
+                        List<String> friends = userClient.createFriends(testUser, anno.friends());
+
                         context.getStore(NAMESPACE).put(
                                 context.getUniqueId(),
                                 testUser.addTestData(new TestData(
                                         defaultPassword,
                                         new ArrayList<>(),
-                                        new ArrayList<>()
+                                        new ArrayList<>(),
+                                        incomeInvitations,
+                                        outcomeInvitations,
+                                        friends
                                 ))
                         );
                     }
