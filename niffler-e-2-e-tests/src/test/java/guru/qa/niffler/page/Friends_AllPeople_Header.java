@@ -1,29 +1,34 @@
 package guru.qa.niffler.page;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.page.component.SearchField;
 
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class Friends_AllPeople_Header {
 
     private SelenideElement searchInput = $x("//input[@placeholder='Search' and contains(@class, 'MuiInputBase-input')]");
-    private SelenideElement inputClearButton = $("#input-clear");
+    public SearchField searchField = new SearchField(searchInput);
 
-    public Friends_AllPeople_Header search(String value){
-        searchInput.setValue(value).pressEnter();
-        return this;
+    private ElementsCollection headerScrollButtons = $$("[aria-label='People tabs'] [role='tab']");
+
+    private void toPage(String pageName) {
+        SelenideElement element = headerScrollButtons.findBy(Condition.text(pageName));
+        if (element.is(Condition.attribute("aria-selected", "false"))) {
+            element.click();
+        }
     }
 
-    public Friends_AllPeople_Header clearSearchField(){
-        inputClearButton.click();
-        return this;
+    public FriendsPage toFriendsPage(){
+        toPage("Friends");
+        return new FriendsPage();
     }
 
-    public Friends_AllPeople_Header searchFieldShouldBeEmpty(){
-        searchInput.shouldHave(Condition.value(""));
-        inputClearButton.shouldNotBe(Condition.exist);
-        return this;
+    public AllPeoplePage toAllPeoplePage(){
+        toPage("All people");
+        return new AllPeoplePage();
     }
 }

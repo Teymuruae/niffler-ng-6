@@ -61,8 +61,8 @@ public class UsersDbClient implements UserClient {
                 xaTransactionTemplate.execute(() -> {
                     AuthUserEntity authUser = authUserEntity(username, "12345");
                     authUserRepository.create(authUser);
-                    UserEntity adressee = userdataUserRepository.create(userEntity(username));
-                    userdataUserRepository.sendInvitation(targetEntity, adressee);
+                    UserEntity requester = userdataUserRepository.create(userEntity(username));
+                    userdataUserRepository.sendInvitation(requester, targetEntity);
                     return null;
                 });
                 userNames.add(username);
@@ -72,16 +72,16 @@ public class UsersDbClient implements UserClient {
     }
 
     @Override
-    public List<String> createOutcomeInvitations(UserJson targetUser, int count) {
+    public List<String> createOutcomeInvitations(UserJson requester, int count) {
         List<String> userNames = new ArrayList<>();
         if (count > 0) {
             String username = randomUsername();
-            UserEntity targetEntity = userdataUserRepository.findById(targetUser.id()).orElseThrow();
+            UserEntity requesterEntity = userdataUserRepository.findById(requester.id()).orElseThrow();
             xaTransactionTemplate.execute(() -> {
                 AuthUserEntity authUser = authUserEntity(username, "12345");
                 authUserRepository.create(authUser);
-                UserEntity requester = userdataUserRepository.create(userEntity(username));
-                userdataUserRepository.sendInvitation(requester, targetEntity);
+                UserEntity addressee = userdataUserRepository.create(userEntity(username));
+                userdataUserRepository.sendInvitation(requesterEntity, addressee);
                 return null;
             });
             userNames.add(username);

@@ -4,12 +4,11 @@ import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
-import guru.qa.niffler.jupiter.extension.BrowserExtension;
-import guru.qa.niffler.jupiter.extension.UsersQueueExtension;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.*;
+import guru.qa.niffler.page.component.Header;
+import guru.qa.niffler.page.component.SearchField;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 @WebTest
 public class FriendsWebTest {
@@ -31,7 +30,7 @@ public class FriendsWebTest {
     @Test
     void friendShouldBePresentInFriendTable(UserJson user) {
         getInsidePage(user.username(), user.testData().password(), friends);
-        friendsAllPeopleHeader.search(user.testData().friends().get(0));
+        friendsAllPeopleHeader.searchField.search(user.testData().friends().get(0));
         friendsPage
                 .assertFriendsTableName("My friends")
                 .assertFriendInList(user.testData().friends().get(0));
@@ -41,7 +40,7 @@ public class FriendsWebTest {
     @Test
     void friendsTableShouldBeEmptyForNewUser(UserJson user) {
         getInsidePage(user.username(), user.testData().password(), friends);
-        friendsAllPeopleHeader.searchFieldShouldBeEmpty();
+        friendsAllPeopleHeader.searchField.searchFieldShouldBeEmpty();
         friendsPage.assertFriendsListIsEmpty();
     }
 
@@ -49,7 +48,7 @@ public class FriendsWebTest {
     @Test
     void incomeInvitationBePresentInFriendsTable(UserJson user) {
         getInsidePage(user.username(), user.testData().password(), friends);
-        friendsAllPeopleHeader.search(user.testData().incomeInvitations().get(0));
+        friendsAllPeopleHeader.searchField.search(user.testData().incomeInvitations().get(0));
         friendsPage
                 .assertFriendsTableName("Friend requests")
                 .assertIncomeRequestInList(user.testData().incomeInvitations().get(0));
@@ -59,7 +58,40 @@ public class FriendsWebTest {
     @Test
     void outcomeInvitationBePresentInAllPeoplesTable(UserJson user) {
         getInsidePage(user.username(), user.testData().password(), allPeople);
-        friendsAllPeopleHeader.search(user.testData().outcomeInvitations().get(0));
+        friendsAllPeopleHeader.searchField.search(user.testData().outcomeInvitations().get(0));
         allPeoplePage.assertRightButtonTextByName(user.testData().outcomeInvitations().get(0), "Waiting...");
+    }
+
+    @User(incomeInvitations = 1)
+    @Test
+    void acceptFriendInvitationTest(UserJson user) {
+        getInsidePage(user.username(), user.testData().password(), friends);
+        friendsAllPeopleHeader.searchField.search(user.testData().incomeInvitations().get(0));
+        friendsPage
+                .assertFriendsTableName("Friend requests")
+                .assertIncomeRequestInList(user.testData().incomeInvitations().get(0))
+                .accept()
+                .assertFriendsTableName("My friends")
+                .assertFriendInList(user.testData().incomeInvitations().get(0));
+    }
+
+    @User(incomeInvitations = 1)
+    @Test
+    void declineFriendInvitationTest(UserJson user) {
+        getInsidePage(user.username(), user.testData().password(), friends);
+        friendsAllPeopleHeader.searchField.search(user.testData().incomeInvitations().get(0));
+        friendsPage
+                .assertFriendsTableName("Friend requests")
+                .assertIncomeRequestInList(user.testData().incomeInvitations().get(0))
+                .decline();
+        friendsAllPeopleHeader.searchField.search(user.testData().incomeInvitations().get(0));
+        friendsPage.assertFriendsListIsEmpty();
+        header.signOut();
+        getInsidePage(user.testData().incomeInvitations().get(0), "12345", friends);
+        friendsAllPeopleHeader.searchField.search(user.username());
+        friendsPage.assertFriendsListIsEmpty();
+        friendsAllPeopleHeader.toAllPeoplePage();
+        friendsAllPeopleHeader.searchField.search(user.username());
+        allPeoplePage.assertRightButtonTextByName(user.username(), "Add friend");
     }
 }
