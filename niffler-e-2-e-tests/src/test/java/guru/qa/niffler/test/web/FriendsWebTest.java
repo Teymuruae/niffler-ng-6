@@ -2,9 +2,11 @@ package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
+import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.jupiter.extension.BrowserExtension;
 import guru.qa.niffler.jupiter.extension.UsersQueueExtension;
+import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,35 +27,39 @@ public class FriendsWebTest {
         header.clickProfileMenuButton(pageName);
     }
 
+    @User(friends = 1)
     @Test
-    void friendShouldBePresentInFriendTable(@UsersQueueExtension.UserType(UsersQueueExtension.Type.WITH_FRIEND) UsersQueueExtension.StaticUser user) {
-        getInsidePage(user.username(), user.password(), friends);
-        friendsAllPeopleHeader.search(user.friend());
+    void friendShouldBePresentInFriendTable(UserJson user) {
+        getInsidePage(user.username(), user.testData().password(), friends);
+        friendsAllPeopleHeader.search(user.testData().friends().get(0));
         friendsPage
                 .assertFriendsTableName("My friends")
-                .assertFriendInList(user.friend());
+                .assertFriendInList(user.testData().friends().get(0));
     }
 
+    @User
     @Test
-    void friendsTableShouldBeEmptyForNewUser(@UsersQueueExtension.UserType(UsersQueueExtension.Type.EMPTY) UsersQueueExtension.StaticUser user) {
-        getInsidePage(user.username(), user.password(), friends);
+    void friendsTableShouldBeEmptyForNewUser(UserJson user) {
+        getInsidePage(user.username(), user.testData().password(), friends);
         friendsAllPeopleHeader.searchFieldShouldBeEmpty();
         friendsPage.assertFriendsListIsEmpty();
     }
 
+    @User(incomeInvitations = 1)
     @Test
-    void incomeInvitationBePresentInFriendsTable(@UsersQueueExtension.UserType(UsersQueueExtension.Type.WITH_INCOME_REQUEST) UsersQueueExtension.StaticUser user) {
-        getInsidePage(user.username(), user.password(), friends);
-        friendsAllPeopleHeader.search(user.income());
+    void incomeInvitationBePresentInFriendsTable(UserJson user) {
+        getInsidePage(user.username(), user.testData().password(), friends);
+        friendsAllPeopleHeader.search(user.testData().incomeInvitations().get(0));
         friendsPage
                 .assertFriendsTableName("Friend requests")
-                .assertIncomeRequestInList(user.income());
+                .assertIncomeRequestInList(user.testData().incomeInvitations().get(0));
     }
 
+    @User
     @Test
-    void outcomeInvitationBePresentInAllPeoplesTable(@UsersQueueExtension.UserType(UsersQueueExtension.Type.WITH_OUTCOME_REQUEST) UsersQueueExtension.StaticUser user) {
-        getInsidePage(user.username(), user.password(), allPeople);
-        friendsAllPeopleHeader.search(user.income());
-        allPeoplePage.assertRightButtonTextByName(user.outcome(), "Waiting...");
+    void outcomeInvitationBePresentInAllPeoplesTable(UserJson user) {
+        getInsidePage(user.username(), user.testData().password(), allPeople);
+        friendsAllPeopleHeader.search(user.testData().outcomeInvitations().get(0));
+        allPeoplePage.assertRightButtonTextByName(user.testData().outcomeInvitations().get(0), "Waiting...");
     }
 }

@@ -24,7 +24,7 @@ public interface SpendApi {
                                   @Query("from") String from,
                                   @Query("to") String to);
 
-  @DELETE("internal/spends//remove")
+  @DELETE("internal/spends/remove")
   Call<SpendJson> deleteSpends(@Query("username") String username,
                                @Query("ids") List<String> ids);
 
