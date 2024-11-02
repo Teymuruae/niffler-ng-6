@@ -4,15 +4,20 @@ import guru.qa.niffler.config.Config;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
+import io.qameta.allure.Step;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class SpendApiClient {
 
     private final Retrofit retrofit = new Retrofit.Builder()
@@ -22,6 +27,8 @@ public class SpendApiClient {
 
     private final SpendApi spendApi = retrofit.create(SpendApi.class);
 
+    @Step("Создание траты")
+    @Nullable
     public SpendJson createSpend(SpendJson spend) {
         final Response<SpendJson> response;
 
@@ -36,6 +43,8 @@ public class SpendApiClient {
         return response.body();
     }
 
+    @Step("Редактирование траты")
+    @Nullable
     public SpendJson editSpend(SpendJson spend) {
         final Response<SpendJson> response;
 
@@ -50,6 +59,8 @@ public class SpendApiClient {
         return response.body();
     }
 
+    @Step("Получение одной траты")
+    @Nonnull
     public SpendJson getSpend(String id, String userName) {
         final Response<SpendJson> response;
 
@@ -64,8 +75,12 @@ public class SpendApiClient {
         return response.body();
     }
 
-    public List<SpendJson> getAllSpends(String userName, CurrencyValues currencyValues,
-                                        String from, String to) {
+    @Step("Получение всех трат")
+    @Nonnull
+    public List<SpendJson> getAllSpends(String userName,
+                                        @Nullable CurrencyValues currencyValues,
+                                        @Nullable String from,
+                                        @Nullable String to) {
         final Response<List<SpendJson>> response;
 
         try {
@@ -79,6 +94,8 @@ public class SpendApiClient {
         return response.body();
     }
 
+    @Step("Удаление категории")
+    @Nullable
     public SpendJson removeSpend(String userName, List<String> ids) {
         final Response<SpendJson> response;
 
@@ -93,6 +110,8 @@ public class SpendApiClient {
         return response.body();
     }
 
+    @Step("Создание категории")
+    @Nullable
     public CategoryJson createCategory(CategoryJson category) {
         final Response<CategoryJson> response;
 
@@ -107,6 +126,8 @@ public class SpendApiClient {
         return response.body();
     }
 
+    @Step("Редактирование категории")
+    @Nullable
     public CategoryJson updateCategory(CategoryJson category) {
         final Response<CategoryJson> response;
 
@@ -121,6 +142,8 @@ public class SpendApiClient {
         return response.body();
     }
 
+    @Step("Получение всех категорий по пользователю")
+    @Nonnull
     public List<CategoryJson> getCategories(String username, boolean excludeArchived) {
         final Response<List<CategoryJson>> response;
 

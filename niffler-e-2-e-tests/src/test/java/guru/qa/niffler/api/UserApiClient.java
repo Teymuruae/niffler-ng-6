@@ -2,15 +2,20 @@ package guru.qa.niffler.api;
 
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.model.UserJson;
+import io.qameta.allure.Step;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.util.List;
 
+@ParametersAreNonnullByDefault
 public class UserApiClient {
 
     private final Retrofit retrofit = new Retrofit.Builder()
@@ -20,6 +25,8 @@ public class UserApiClient {
 
     private final UserApi userApi = retrofit.create(UserApi.class);
 
+    @Step("Получение данных пользователя {userName}")
+    @Nonnull
     public UserJson getCurrentUser(String userName) {
         final Response<UserJson> response;
 
@@ -34,7 +41,9 @@ public class UserApiClient {
         return response.body();
     }
 
-    public List<UserJson> getAllSpends(String userName,
+    @Step("Получение списка пользователей")
+    @Nonnull
+    public List<UserJson> getAllUsers(String userName,
                                        String searchQuery) {
         final Response<List<UserJson>> response;
 
@@ -49,6 +58,8 @@ public class UserApiClient {
         return response.body();
     }
 
+    @Step("Редактирование пользователя {user.username}")
+    @Nullable
     public UserJson updateUser(UserJson user) {
         final Response<UserJson> response;
 
@@ -63,8 +74,10 @@ public class UserApiClient {
         return response.body();
     }
 
+    @Step("Получение списка друзей")
+    @Nonnull
     public List<UserJson> getAllFriends(String userName,
-                                        String searchQuery) {
+                                       @Nullable String searchQuery) {
         final Response<List<UserJson>> response;
 
         try {
@@ -78,6 +91,8 @@ public class UserApiClient {
         return response.body();
     }
 
+    @Step("Отправка заявки на дружбу")
+    @Nullable
     public UserJson sendInvitation(String username, String targetUsername) {
         final Response<UserJson> response;
 
@@ -92,6 +107,8 @@ public class UserApiClient {
         return response.body();
     }
 
+    @Step("Подтверждение заявки на дружбу")
+    @Nullable
     public UserJson acceptInvitation(String username, String targetUsername) {
         final Response<UserJson> response;
 
@@ -106,6 +123,8 @@ public class UserApiClient {
         return response.body();
     }
 
+    @Step("Отклонение заявки на дружбу")
+    @Nullable
     public UserJson declineInvitation(String username, String targetUsername) {
         final Response<UserJson> response;
 
@@ -120,6 +139,8 @@ public class UserApiClient {
         return response.body();
     }
 
+    @Step("Удаление друга {targetUsername} у {username}")
+    @Nullable
     public UserJson removeFriend(String username, String targetUsername) {
         final Response<UserJson> response;
 
