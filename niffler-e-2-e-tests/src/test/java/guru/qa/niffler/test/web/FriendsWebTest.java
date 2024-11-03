@@ -7,7 +7,6 @@ import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.*;
 import guru.qa.niffler.page.component.Header;
-import guru.qa.niffler.page.component.SearchField;
 import org.junit.jupiter.api.Test;
 
 @WebTest
@@ -15,7 +14,7 @@ public class FriendsWebTest {
     private Header header = new Header();
     private FriendsPage friendsPage = new FriendsPage();
     private AllPeoplePage allPeoplePage = new AllPeoplePage();
-    private Friends_AllPeople_Header friendsAllPeopleHeader = new Friends_AllPeople_Header();
+    private FriendsAllPeopleHeader friendsAllPeopleHeader = new FriendsAllPeopleHeader();
     private static final Config CFG = Config.getInstance();
     private String friends = "Friends";
     private String allPeople = "All People";

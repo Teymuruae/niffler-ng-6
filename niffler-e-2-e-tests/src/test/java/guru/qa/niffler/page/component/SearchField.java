@@ -2,7 +2,6 @@ package guru.qa.niffler.page.component;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
-import guru.qa.niffler.page.Friends_AllPeople_Header;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;

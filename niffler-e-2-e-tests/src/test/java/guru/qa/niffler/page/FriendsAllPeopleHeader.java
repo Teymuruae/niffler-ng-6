@@ -8,7 +8,7 @@ import guru.qa.niffler.page.component.SearchField;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.$x;
 
-public class Friends_AllPeople_Header {
+public class FriendsAllPeopleHeader {
 
     private SelenideElement searchInput = $x("//input[@placeholder='Search' and contains(@class, 'MuiInputBase-input')]");
     public SearchField searchField = new SearchField(searchInput);
