@@ -5,12 +5,15 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class ProfilePage {
+@ParametersAreNonnullByDefault
+public class ProfilePage extends BasePage<ProfilePage>{
 
-    private final SelenideElement showArchiveSwitcher = $(".PrivateSwitchBase-input");
+private final SelenideElement showArchiveSwitcher = $(".PrivateSwitchBase-input");
     private final ElementsCollection categoryNames = $$(".MuiChip-label");
     private final SelenideElement nameInputField = $("#name");
     private final SelenideElement saveButton = $("button[type='submit']");

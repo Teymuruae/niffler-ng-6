@@ -1,17 +1,21 @@
 package guru.qa.niffler.test.web;
 
 import guru.qa.niffler.data.dao.impl.UserdataUserDaoJdbc;
+import guru.qa.niffler.jupiter.extension.UsersClientExtension;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.service.UserClient;
 import guru.qa.niffler.service.UsersDbClient;
 import guru.qa.niffler.utils.RandomDataUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.UUID;
 
-import static guru.qa.niffler.utils.RandomDataUtils.randomUsername;
-
+@ExtendWith(UsersClientExtension.class)
 public class JdbcTest {
+
+    private UserClient usersClient;
 /*
     @Test
     void createUserJdbcTransactionTest(){
@@ -90,30 +94,7 @@ public class JdbcTest {
                 null
         );
 
-        UsersDbClient usersDbClient = new UsersDbClient();
-        usersDbClient.createUserJdbcWithoutTransaction(userJson);
 
-        System.out.println(userJson);
-    }
-
-    @Test
-    void createUserSpringJdbcTransactionTest(){
-        UserJson userJson = new UserJson(
-                null,
-                randomUsername(),
-                "Ivan",
-                "Ivanov",
-                "Ivanov Ivan",
-                CurrencyValues.EUR,
-                null,
-                null
-        );
-
-        UsersDbClient usersDbClient = new UsersDbClient();
-        usersDbClient.createUserSpringJdbcTransaction(userJson);
-
-        System.out.println(userJson);
-    }
 
     @Test
     void createUserSpringJdbcWithoutTransactionTest(){
