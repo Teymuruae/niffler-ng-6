@@ -1,5 +1,6 @@
 package guru.qa.niffler.api;
 
+import guru.qa.niffler.api.core.RestClient;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.model.UserJson;
 import io.qameta.allure.Step;
@@ -16,14 +17,14 @@ import java.io.IOException;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-public class UserApiClient {
+public class UserApiClient extends RestClient {
 
-    private final Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(Config.getInstance().spendUrl())
-            .addConverterFactory(JacksonConverterFactory.create())
-            .build();
+    private final UserApi userApi;
 
-    private final UserApi userApi = retrofit.create(UserApi.class);
+    public UserApiClient(){
+        super(CFG.userdataUrl());
+        this.userApi = retrofit.create(UserApi.class);
+    }
 
     @Step("Получение данных пользователя {userName}")
     @Nonnull

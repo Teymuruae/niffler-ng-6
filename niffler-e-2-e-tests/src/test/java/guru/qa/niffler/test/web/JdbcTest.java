@@ -1,16 +1,8 @@
 package guru.qa.niffler.test.web;
 
-import guru.qa.niffler.data.dao.impl.UserdataUserDaoJdbc;
 import guru.qa.niffler.jupiter.extension.UsersClientExtension;
-import guru.qa.niffler.model.CurrencyValues;
-import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.service.UserClient;
-import guru.qa.niffler.service.UsersDbClient;
-import guru.qa.niffler.utils.RandomDataUtils;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import java.util.UUID;
 
 @ExtendWith(UsersClientExtension.class)
 public class JdbcTest {
