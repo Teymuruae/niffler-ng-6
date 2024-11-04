@@ -6,11 +6,14 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class SpendingTable {
-    private final SelenideElement self = $("#spendings");
+public class SpendingTable extends BaseComponent<SpendingTable>{
+
     private final ElementsCollection spendingRows = self.$$("tbody tr");
     private final SelenideElement modalDialog = $("div[role='dialog']");
 
+    public SpendingTable(){
+        super($("#spendings"));
+    }
     @Step("Выбор периода")
     public SpendingTable selectPeriod(DataFilterValues period) {
         self.$("#period").click();

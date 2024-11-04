@@ -8,7 +8,7 @@ import lombok.Setter;
 import static com.codeborne.selenide.Selenide.$;
 
 
-public class RegisterPage {
+public class RegisterPage extends BasePage<RegisterPage>{
 
     private final SelenideElement userNameField = $("#username");
     private final SelenideElement passwordField = $("#password");

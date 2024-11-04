@@ -2,16 +2,16 @@ package guru.qa.niffler.page.component;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class SearchField {
+public class SearchField extends BaseComponent<SearchField> {
 
-    private final SelenideElement self;
     private SelenideElement inputClearButton = $("#input-clear");
     public SearchField(SelenideElement self) {
-        this.self = self;
+        super(self);
     }
 
     @Step("Поиск")

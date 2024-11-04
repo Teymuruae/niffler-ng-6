@@ -71,4 +71,16 @@ public class ProfileTest {
                 .clickSaveButton()
                 .assertSuccessMessage();
     }
+
+    @User
+    @Test
+    void userCanUpdateProfile(UserJson user) {
+        Selenide.open(CFG.frontUrl(), LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .getHeader().toProfilePage()
+                .updateName("John Snow")
+                .checkAlert("Profile successfully updated")
+                .getHeader().toMainPage()
+                .getHeader().toProfilePage().checkName("John Snow");
+    }
 }

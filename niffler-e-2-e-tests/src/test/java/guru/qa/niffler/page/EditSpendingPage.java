@@ -7,7 +7,7 @@ import io.qameta.allure.Step;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
-public class EditSpendingPage {
+public class EditSpendingPage extends BasePage<EditSpendingPage>{
   private final SelenideElement descriptionInput = $("#description");
   private final SelenideElement saveBtn = $("#save");
   private final SelenideElement amountInputField = $("#amount");
@@ -35,6 +35,14 @@ public class EditSpendingPage {
   @Step("Ввод суммы траты: {amount}")
   public EditSpendingPage setSpendingAmount(String amount) {
     amountInputField.setValue(amount);
+    return this;
+  }
+
+  public EditSpendingPage createSpend(String description, String category, String amount) {
+    setSpendingCategory(category);
+    setNewSpendingDescription(description);
+    setSpendingAmount(amount);
+    save();
     return this;
   }
 }

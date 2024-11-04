@@ -8,15 +8,20 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.*;
 
-public class Header {
-    private final SelenideElement profileImageButton = $("[aria-label=\"Menu\"]");
-    private final SelenideElement newSpendingButton = $("a[href=\"/spending\"]");
-    private final SelenideElement nifflerButton = $x("//h1[text() = 'Niffler']");
+public class Header extends BaseComponent<Header>{
+    private final SelenideElement profileImageButton = self.$("[aria-label=\"Menu\"]");
+    private final SelenideElement newSpendingButton = self.$("a[href=\"/spending\"]");
+    private final SelenideElement nifflerButton = self.$x(".//h1[text() = 'Niffler']");
     private final ElementsCollection profilePopUpMenuButtons = $$("[role=\"menu\"] .MuiButtonBase-root");
     private String friends = "Friends";
     private String allPeople = "All People";
     private String profile = "Profile";
     private String signOut = "Sign out";
+
+    public Header() {
+        super($("#root header"));
+    }
+
     public void clickProfileMenuButton(String buttonName){
         profileImageButton.click();
         profilePopUpMenuButtons.findBy(Condition.text(buttonName)).click();

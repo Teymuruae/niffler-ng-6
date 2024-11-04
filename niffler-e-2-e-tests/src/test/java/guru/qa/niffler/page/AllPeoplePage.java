@@ -8,7 +8,7 @@ import io.qameta.allure.Step;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class AllPeoplePage {
+public class AllPeoplePage extends BasePage<AllPeoplePage>{
     private SelenideElement allPeopleTable = $("#all");
     private ElementsCollection names = allPeopleTable.$$(".MuiTypography-body1");
 

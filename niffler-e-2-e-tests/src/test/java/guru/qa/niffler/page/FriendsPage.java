@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class FriendsPage {
+public class FriendsPage extends BasePage<FriendsPage>{
     private SelenideElement tableName = $("#simple-tabpanel-friends h2.MuiTypography-root.MuiTypography-h5");
     private SelenideElement friendsListTable = $("#friends");
     private SelenideElement requestsListTable = $("#requests");

@@ -8,7 +8,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
-public class MainPage {
+public class MainPage extends BasePage<MainPage>{
   private final ElementsCollection tableRows = $("#spendings tbody").$$("tr");
   private final ElementsCollection titlesText = $$("h2");
   private SelenideElement searchInput = $x("//input[@placeholder='Search' and contains(@class, 'MuiInputBase-input')]");

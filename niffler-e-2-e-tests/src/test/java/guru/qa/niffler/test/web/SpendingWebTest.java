@@ -12,6 +12,7 @@ import guru.qa.niffler.page.EditSpendingPage;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.component.Header;
+import guru.qa.niffler.page.component.SpendingTable;
 import guru.qa.niffler.utils.RandomDataUtils;
 import org.junit.jupiter.api.Test;
 
@@ -65,6 +66,19 @@ public class SpendingWebTest {
                 .selectDateInCalendar(new Date());
         new EditSpendingPage().save();
         new MainPage().checkThatTableContainsSpending(description);
+    }
+
+    @User
+    @Test
+    void userCanCreateSpending(UserJson user) {
+        Selenide.open(CFG.frontUrl(), LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .getHeader()
+                .addSpendingPage()
+                .createSpend("Museum", "Art", "300")
+                .checkAlert("New spending is successfully created");
+        new SpendingTable()
+                .checkTableContains("Museum");
     }
 }
 

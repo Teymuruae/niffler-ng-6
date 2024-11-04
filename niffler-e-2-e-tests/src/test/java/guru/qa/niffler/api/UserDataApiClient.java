@@ -1,14 +1,11 @@
 package guru.qa.niffler.api;
 
 import guru.qa.niffler.api.core.RestClient;
-import guru.qa.niffler.config.Config;
 import guru.qa.niffler.model.UserJson;
 import io.qameta.allure.Step;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -17,13 +14,13 @@ import java.io.IOException;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
-public class UserApiClient extends RestClient {
+public class UserDataApiClient extends RestClient {
 
-    private final UserApi userApi;
+    private final UserDataApi userDataApi;
 
-    public UserApiClient(){
+    public UserDataApiClient() {
         super(CFG.userdataUrl());
-        this.userApi = retrofit.create(UserApi.class);
+        this.userDataApi = retrofit.create(UserDataApi.class);
     }
 
     @Step("Получение данных пользователя {userName}")
@@ -33,7 +30,7 @@ public class UserApiClient extends RestClient {
 
         try {
             response =
-                    userApi.getCurrentUser(userName)
+                    userDataApi.getCurrentUser(userName)
                             .execute();
         } catch (IOException e) {
             throw new AssertionError(e);
@@ -45,12 +42,12 @@ public class UserApiClient extends RestClient {
     @Step("Получение списка пользователей")
     @Nonnull
     public List<UserJson> getAllUsers(String userName,
-                                       String searchQuery) {
+                                      String searchQuery) {
         final Response<List<UserJson>> response;
 
         try {
             response =
-                    userApi.getAllUsers(userName, searchQuery)
+                    userDataApi.getAllUsers(userName, searchQuery)
                             .execute();
         } catch (IOException e) {
             throw new AssertionError(e);
@@ -66,7 +63,7 @@ public class UserApiClient extends RestClient {
 
         try {
             response =
-                    userApi.updateUser(user)
+                    userDataApi.updateUser(user)
                             .execute();
         } catch (IOException e) {
             throw new AssertionError(e);
@@ -78,12 +75,12 @@ public class UserApiClient extends RestClient {
     @Step("Получение списка друзей")
     @Nonnull
     public List<UserJson> getAllFriends(String userName,
-                                       @Nullable String searchQuery) {
+                                        @Nullable String searchQuery) {
         final Response<List<UserJson>> response;
 
         try {
             response =
-                    userApi.friends(userName, searchQuery)
+                    userDataApi.friends(userName, searchQuery)
                             .execute();
         } catch (IOException e) {
             throw new AssertionError(e);
@@ -99,7 +96,7 @@ public class UserApiClient extends RestClient {
 
         try {
             response =
-                    userApi.sendInvitation(username, targetUsername)
+                    userDataApi.sendInvitation(username, targetUsername)
                             .execute();
         } catch (IOException e) {
             throw new AssertionError(e);
@@ -115,7 +112,7 @@ public class UserApiClient extends RestClient {
 
         try {
             response =
-                    userApi.acceptInvitation(username, targetUsername)
+                    userDataApi.acceptInvitation(username, targetUsername)
                             .execute();
         } catch (IOException e) {
             throw new AssertionError(e);
@@ -131,7 +128,7 @@ public class UserApiClient extends RestClient {
 
         try {
             response =
-                    userApi.declineInvitation(username, targetUsername)
+                    userDataApi.declineInvitation(username, targetUsername)
                             .execute();
         } catch (IOException e) {
             throw new AssertionError(e);
@@ -147,7 +144,7 @@ public class UserApiClient extends RestClient {
 
         try {
             response =
-                    userApi.removeFriend(username, targetUsername)
+                    userDataApi.removeFriend(username, targetUsername)
                             .execute();
         } catch (IOException e) {
             throw new AssertionError(e);

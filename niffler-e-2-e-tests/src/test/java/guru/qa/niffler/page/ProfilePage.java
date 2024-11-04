@@ -5,6 +5,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import static com.codeborne.selenide.Selenide.$;
@@ -63,5 +64,20 @@ private final SelenideElement showArchiveSwitcher = $(".PrivateSwitchBase-input"
     @Step("Проверка сообщения успешного сохранения")
     public void assertSuccessMessage() {
         successSaveChangesMessage.shouldHave(Condition.text("Profile successfully updated"));
+    }
+
+
+    @Step("Update profle name to {newName}")
+    public ProfilePage updateName(String newName) {
+        setName(newName);
+        saveButton.click();
+        return this;
+    }
+
+
+    @Step("Check that name is {expectedName}")
+    public ProfilePage checkName(String expectedName) {
+        nameInputField.shouldHave(Condition.value(expectedName));
+        return this;
     }
 }

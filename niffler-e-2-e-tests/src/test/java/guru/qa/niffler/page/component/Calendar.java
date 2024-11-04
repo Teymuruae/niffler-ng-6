@@ -6,11 +6,9 @@ import io.qameta.allure.Step;
 
 import java.util.Date;
 
-public class Calendar {
-    private final SelenideElement self;
-
+public class Calendar extends BaseComponent<Calendar> {
     public Calendar(SelenideElement self) {
-        this.self = self;
+     super(self);
     }
 
     @Step("Выбор даты в календаре")
