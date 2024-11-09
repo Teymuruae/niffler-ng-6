@@ -96,6 +96,7 @@ dependencies {
     // WEB
     testImplementation "com.codeborne:selenide:${selenideVersion}"
     // Utils
+    testImplementation 'ru.yandex.qatools.ashot:ashot:1.5.4'
     testImplementation("com.github.javafaker:javafaker:${fakerVersion}") {
         exclude group: 'org.yaml'
     }
