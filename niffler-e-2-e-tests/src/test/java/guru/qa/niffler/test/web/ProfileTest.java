@@ -3,16 +3,19 @@ package guru.qa.niffler.test.web;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.Category;
+import guru.qa.niffler.jupiter.annotation.ScreenShotTest;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.UserJson;
-import guru.qa.niffler.page.component.Header;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.ProfilePage;
+import guru.qa.niffler.page.component.Header;
 import guru.qa.niffler.utils.RandomDataUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.awt.image.BufferedImage;
 
 @WebTest
 public class ProfileTest {
@@ -65,7 +68,7 @@ public class ProfileTest {
         String name = RandomDataUtils.randomName();
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.testData().password());
-               header
+        header
                 .toProfilePage()
                 .setName(name)
                 .clickSaveButton()
@@ -82,5 +85,16 @@ public class ProfileTest {
                 .checkAlert("Profile successfully updated")
                 .getHeader().toMainPage()
                 .getHeader().toProfilePage().checkName("John Snow");
+    }
+
+    @User
+    @ScreenShotTest(value = "img/expected-avatar.png", rewriteExpected = true)
+    void avatarImageTest(UserJson user, BufferedImage expected) {
+        Selenide.open(CFG.frontUrl(), LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .getHeader()
+                .toProfilePage()
+                .addAvatar("img/expected-avatar.png")
+                .assertAvatarImage(expected);
     }
 }
