@@ -103,8 +103,8 @@ public class ProfilePage extends BasePage<ProfilePage> {
         BufferedImage actual = avatar.screenshotAsImage();
         assertFalse(new ScreenDiffResult(
                 expected,
-                actual
-        ));
+                actual),
+                "Screen comparison failure");
         return this;
     }
 }
