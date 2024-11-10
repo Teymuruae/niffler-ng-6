@@ -3,22 +3,33 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.utils.ScreenDiffResult;
 import io.qameta.allure.Step;
+import lombok.Getter;
 
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.nio.file.Path;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @ParametersAreNonnullByDefault
-public class ProfilePage extends BasePage<ProfilePage>{
+@Getter
+public class ProfilePage extends BasePage<ProfilePage> {
 
-private final SelenideElement showArchiveSwitcher = $(".PrivateSwitchBase-input");
+    private final SelenideElement showArchiveSwitcher = $(".PrivateSwitchBase-input");
     private final ElementsCollection categoryNames = $$(".MuiChip-label");
     private final SelenideElement nameInputField = $("#name");
     private final SelenideElement saveButton = $("button[type='submit']");
     private final SelenideElement successSaveChangesMessage = $(".MuiAlert-message");
+    private final SelenideElement uploadAvatarButton = $("#image__input");
+//    private final SelenideElement uploadAvatarButton = $(".image__input-label .MuiButtonBase-root");
+    private final SelenideElement avatar = $(".MuiGrid-root .MuiAvatar-root");
+
 
     @Step("Проверка архивной категории")
     public boolean isCategoryActive(String category) {
@@ -41,7 +52,7 @@ private final SelenideElement showArchiveSwitcher = $(".PrivateSwitchBase-input"
             if (!showArchiveSwitcher.is(Condition.checked)) {
                 showArchiveSwitcher.click();
             }
-        } else if(!showArchive){
+        } else if (!showArchive) {
             if (showArchiveSwitcher.is(Condition.checked)) {
                 showArchiveSwitcher.click();
             }
@@ -78,6 +89,22 @@ private final SelenideElement showArchiveSwitcher = $(".PrivateSwitchBase-input"
     @Step("Check that name is {expectedName}")
     public ProfilePage checkName(String expectedName) {
         nameInputField.shouldHave(Condition.value(expectedName));
+        return this;
+    }
+
+    @Step("Add avatar")
+    public ProfilePage addAvatar(String path) {
+        uploadAvatarButton.uploadFromClasspath(path);
+        return this;
+    }
+
+    @Step("Assert avatar image")
+    public ProfilePage assertAvatarImage(BufferedImage expected){
+        BufferedImage actual = avatar.screenshotAsImage();
+        assertFalse(new ScreenDiffResult(
+                expected,
+                actual
+        ));
         return this;
     }
 }

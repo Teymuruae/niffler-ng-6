@@ -95,8 +95,6 @@ public class SpendingWebTest {
                     amount = 79990
             )
     )
-
-
     @ScreenShotTest("img/expected-stat.png")
     void checkStatComponentTest(UserJson user, BufferedImage expected) throws IOException {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
