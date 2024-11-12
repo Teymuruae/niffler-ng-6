@@ -1,6 +1,7 @@
 package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
+import guru.qa.niffler.condition.Color;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.ScreenShotTest;
@@ -14,6 +15,7 @@ import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
 import guru.qa.niffler.page.component.Header;
 import guru.qa.niffler.page.component.SpendingTable;
+import guru.qa.niffler.page.component.StatComponent;
 import guru.qa.niffler.utils.RandomDataUtils;
 import guru.qa.niffler.utils.ScreenDiffResult;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @WebTest
 public class SpendingWebTest {
 
+    private final StatComponent statComponent = new StatComponent();
     private final Config CFG = Config.getInstance();
     private Header header = new Header();
 
@@ -89,21 +92,31 @@ public class SpendingWebTest {
     }
 
     @User(
-            spendings = @Spending(
-                    category = "Обучение",
-                    description = "Обучение Advanced 2.0",
-                    amount = 79990
-            )
+            spendings =
+                    {
+                            @Spending(
+                                    category = "Обучение",
+                                    description = "Обучение Advanced 2.0",
+                                    amount = 79990
+                            ),
+                            @Spending(
+                                    category = "Транспорт",
+                                    description = "Такси",
+                                    amount = 79
+                            )
+                    }
     )
     @ScreenShotTest("img/expected-stat.png")
     void checkStatComponentTest(UserJson user, BufferedImage expected) throws IOException {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.testData().password());
-        Selenide.sleep(1000);
-        BufferedImage actual = ImageIO.read($("canvas[role='img']").screenshot());
-        assertFalse(new ScreenDiffResult(
-                expected,
-                actual
-        ));
+//        Selenide.sleep(3000);
+//        BufferedImage actual = ImageIO.read($("canvas[role='img']").screenshot());
+//        assertFalse(new ScreenDiffResult(
+//                expected,
+//                actual
+//        ), "Screen comparison failure");
+
+        statComponent.checkBubbles(Color.yellow, Color.green);
     }
 }

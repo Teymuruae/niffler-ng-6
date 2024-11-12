@@ -50,7 +50,7 @@ public class ScreenShotTestExtension implements ParameterResolver, TestExecution
                     ImageIO.write(actual, "png", new File("src/test/resources/" + screenShotTest.value()));
                 }
             }
-        }
+
 
         ScreenDif screenDif = new ScreenDif(
                 "data:image/png;base64," + encoder.encodeToString(imageToBytes(getExpected())),
@@ -63,6 +63,7 @@ public class ScreenShotTestExtension implements ParameterResolver, TestExecution
                 "application/vnd.allure.image.diff",
                 objectMapper.writeValueAsString(screenDif)
         );
+        }
         throw throwable;
     }
 
