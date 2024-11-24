@@ -1,10 +1,15 @@
 package guru.qa.niffler.page.component;
 
 import com.codeborne.selenide.*;
+import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.page.EditSpendingPage;
 import io.qameta.allure.Step;
 
+import javax.annotation.Nonnull;
+
 import static com.codeborne.selenide.Selenide.$;
+import static guru.qa.niffler.condition.SpendConditions.spends;
+import static guru.qa.niffler.condition.StatConditions.statBubblesContains;
 
 public class SpendingTable extends BaseComponent<SpendingTable>{
 
@@ -52,6 +57,13 @@ public class SpendingTable extends BaseComponent<SpendingTable>{
     @Step("Проверка размера списка трат")
     public SpendingTable checkTableSize(int expectedSize) {
         spendingRows.shouldHave(CollectionCondition.size(expectedSize));
+        return this;
+    }
+
+    @Step("Check that spends in table equals spends {spendJson}")
+    @Nonnull
+    public SpendingTable checkSpendTableRows(SpendJson... spendJson) {
+        spendingRows.should(spends(spendJson));
         return this;
     }
 }

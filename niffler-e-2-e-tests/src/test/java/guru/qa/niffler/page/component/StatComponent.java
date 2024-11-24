@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import static com.codeborne.selenide.Selenide.$;
-import static guru.qa.niffler.condition.StatConditions.color;
+import static guru.qa.niffler.condition.StatConditions.*;
 import static java.util.Objects.requireNonNull;
 
 public class StatComponent extends BaseComponent<StatComponent> {
@@ -32,6 +32,26 @@ public class StatComponent extends BaseComponent<StatComponent> {
   @Nonnull
   public StatComponent checkBubbles(Color... expectedColors) {
     bubbles.should(color(expectedColors));
+    return this;
+  }
+
+  @Step("Check that stat bubbles equals bubbles {expectedBubbles}")
+  @Nonnull
+  public StatComponent checkBubbles(Bubble... expectedBubbles) {
+    bubbles.should(statBubbles(expectedBubbles));
+    return this;
+  }
+  @Step("Check that stat bubbles contains bubbles {expectedBubbles}")
+  @Nonnull
+  public StatComponent checkBubblesInAnyOrder(Bubble... expectedBubbles) {
+    bubbles.should(statBubblesInAnyOrder(expectedBubbles));
+    return this;
+  }
+
+  @Step("Check that stat bubbles contains bubbles {expectedBubbles}")
+  @Nonnull
+  public StatComponent checkBubblesContains(Bubble... expectedBubbles) {
+    bubbles.should(statBubblesContains(expectedBubbles));
     return this;
   }
 }
