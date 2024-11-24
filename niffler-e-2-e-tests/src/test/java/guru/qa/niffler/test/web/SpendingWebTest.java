@@ -8,31 +8,31 @@ import guru.qa.niffler.jupiter.annotation.ScreenShotTest;
 import guru.qa.niffler.jupiter.annotation.Spending;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
+import guru.qa.niffler.model.CategoryJson;
+import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.EditSpendingPage;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
+import guru.qa.niffler.page.component.Bubble;
 import guru.qa.niffler.page.component.Header;
 import guru.qa.niffler.page.component.SpendingTable;
 import guru.qa.niffler.page.component.StatComponent;
 import guru.qa.niffler.utils.RandomDataUtils;
-import guru.qa.niffler.utils.ScreenDiffResult;
+import jaxb.userdata.Currency;
 import org.junit.jupiter.api.Test;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Date;
-
-import static com.codeborne.selenide.Selenide.$;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @WebTest
 public class SpendingWebTest {
 
     private final StatComponent statComponent = new StatComponent();
     private final Config CFG = Config.getInstance();
+    private final SpendingTable spendingTable = new SpendingTable();
     private Header header = new Header();
 
     @User(
@@ -102,6 +102,11 @@ public class SpendingWebTest {
                             @Spending(
                                     category = "Транспорт",
                                     description = "Такси",
+                                    amount = 1200
+                            ),
+                            @Spending(
+                                    category = "Еда",
+                                    description = "Чипсы",
                                     amount = 79
                             )
                     }
@@ -117,6 +122,45 @@ public class SpendingWebTest {
 //                actual
 //        ), "Screen comparison failure");
 
-        statComponent.checkBubbles(Color.yellow, Color.green);
+        statComponent.checkBubbles(Color.green, Color.yellow);
+//        Bubble transport = new Bubble(Color.green, "Транспорт 1200 ₽");
+//        Bubble education = new Bubble(Color.yellow, "Обучение 79990 ₽");
+//        Bubble education2 = new Bubble(Color.yellow, "Обучение 79654 ₽");
+//        statComponent.checkBubbles(
+//               transport,education
+//        );
+//        statComponent.checkBubblesInAnyOrder(education,transport, education2);
+//        statComponent.checkBubblesContains(transport, education);
+    }
+
+    @User(
+            spendings =
+                    {
+                            @Spending(
+                                    category = "Обучение",
+                                    description = "Обучение Advanced 2.0",
+                                    amount = 79990
+//                            ),
+//                            @Spending(
+//                                    category = "Транспорт",
+//                                    description = "Такси",
+//                                    amount = 1200
+//                            ),
+//                            @Spending(
+//                                    category = "Еда",
+//                                    description = "Чипсы",
+//                                    amount = 79
+                            )
+                    }
+    )
+    @Test
+    void checkSpendTableTest(UserJson user) {
+        CategoryJson categoryJson = new CategoryJson( null, "Обучение" , "", true);
+        SpendJson spend = new SpendJson(null, new Date(), categoryJson, CurrencyValues.RUB, 79990D,
+                "Обучение Advanced1 2.0", "");
+        Selenide.open(CFG.frontUrl(), LoginPage.class)
+                .login(user.username(), user.testData().password());
+    spendingTable.checkSpendTableRows(spend);
+//    spendingTable.checkSpendTableRows(user.testData().spendings().toArray(SpendJson[]::new));
     }
 }
