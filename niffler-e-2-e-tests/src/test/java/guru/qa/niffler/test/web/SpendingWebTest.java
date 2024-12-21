@@ -20,12 +20,18 @@ import guru.qa.niffler.page.component.Header;
 import guru.qa.niffler.page.component.SpendingTable;
 import guru.qa.niffler.page.component.StatComponent;
 import guru.qa.niffler.utils.RandomDataUtils;
+import guru.qa.niffler.utils.ScreenDiffResult;
 import jaxb.userdata.Currency;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Date;
+
+import static com.codeborne.selenide.Selenide.$;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @WebTest
 public class SpendingWebTest {
@@ -133,6 +139,19 @@ public class SpendingWebTest {
 //        statComponent.checkBubblesContains(transport, education);
     }
 
+
+    @SneakyThrows
+    @ScreenShotTest("img/expected-stat.png")
+    void screenShotTest(BufferedImage expected){
+        Selenide.open("https://timesheet-dev.aplanadc.ru/login");
+
+        BufferedImage actual = ImageIO.read($("#logo").screenshot());
+        assertFalse(new ScreenDiffResult(
+                expected,
+                actual
+        ));
+
+    }
     @User(
             spendings =
                     {
